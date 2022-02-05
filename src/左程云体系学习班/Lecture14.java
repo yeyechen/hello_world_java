@@ -25,7 +25,7 @@ public class Lecture14 {
       parents = new HashMap<>();
       sizeMap = new HashMap<>();
 
-      // 初始化时每个集合只有自己一个节点
+      // 初始化时每个集合只有自己一个节点, 且都为代表节点
       for (V cur : values) {
         Node<V> node = new Node<>(cur);
         nodes.put(cur, node);
