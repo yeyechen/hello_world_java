@@ -15,6 +15,7 @@ public class Lecture14 {
    * */
 
   public static class UnionFind<V> {
+
     HashMap<V, Node<V>> nodes;
     HashMap<Node<V>, Node<V>> parents; // 只记录直系父子关系: key -> 子, value ->父
     HashMap<Node<V>, Integer> sizeMap; // 记录每个代表节点(parent指针指向自己的节点)
@@ -71,6 +72,9 @@ public class Lecture14 {
       return findFather(nodes.get(a)) == nodes.get(b);
     }
 
+    public int size() {
+      return sizeMap.size();
+    }
   }
 
   private static class Node<V> {
