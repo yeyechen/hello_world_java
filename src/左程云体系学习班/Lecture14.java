@@ -16,9 +16,9 @@ public class Lecture14 {
 
   public static class UnionFind<V> {
 
-    HashMap<V, Node<V>> nodes;
-    HashMap<Node<V>, Node<V>> parents; // 只记录直系父子关系: key -> 子, value ->父
-    HashMap<Node<V>, Integer> sizeMap; // 记录每个代表节点(parent指针指向自己的节点)
+    private final HashMap<V, Node<V>> nodes;
+    private final HashMap<Node<V>, Node<V>> parents; // 只记录直系父子关系: key -> 子, value ->父
+    private final HashMap<Node<V>, Integer> sizeMap; // 记录每个代表节点(parent指针指向自己的节点)
 
     public UnionFind(List<V> values) {
       nodes = new HashMap<>();
