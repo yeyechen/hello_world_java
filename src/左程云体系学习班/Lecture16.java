@@ -1,12 +1,16 @@
 package 左程云体系学习班;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
+import 左程云体系学习班.Lecture14.UnionFind;
 
 public class Lecture16 {
 
@@ -89,11 +93,11 @@ public class Lecture16 {
 
   public static class GraphNode {
 
-    private int value;
+    private final int value;
     private int in; // 入度：多少个节点是指向此节点的
     private int out; // 出度：有多少个节点被此节点指向
-    private List<GraphNode> nexts; // 被指向的节点
-    private List<Edge> edges; // 只记录往外出的边
+    private final List<GraphNode> nexts; // 被指向的节点
+    private final List<Edge> edges; // 只记录往外出的边
 
     public GraphNode(int value) {
       this.value = value;
@@ -106,9 +110,9 @@ public class Lecture16 {
 
   public static class Edge {
 
-    private int weight;
-    private GraphNode from;
-    private GraphNode to;
+    private final int weight;
+    private final GraphNode from;
+    private final GraphNode to;
 
     public Edge(int weight, GraphNode from, GraphNode to) {
       this.weight = weight;
@@ -165,4 +169,38 @@ public class Lecture16 {
   }
 
   // 3. 拓扑排序
+  public static List<GraphNode> sortedTopology(Graph graph) {
+    // key 某个节点   value 剩余的入度
+    HashMap<GraphNode, Integer> inMap = new HashMap<>();
+    // 只有剩余入度为0的点，才进入这个队列
+    Queue<GraphNode> zeroInQueue = new LinkedList<>();
+    for (GraphNode node : graph.nodes.values()) {
+      inMap.put(node, node.in);
+      if (node.in == 0) {
+        zeroInQueue.add(node);
+      }
+    }
+    List<GraphNode> result = new ArrayList<>();
+    while (!zeroInQueue.isEmpty()) {
+      GraphNode cur = zeroInQueue.poll();
+      result.add(cur);
+      for (GraphNode next : cur.nexts) {
+        inMap.put(next, inMap.get(next) - 1);
+        if (inMap.get(next) == 0) {
+          zeroInQueue.add(next);
+        }
+      }
+    }
+    return result;
+  }
+
+  public static class EdgeWeightAscending implements Comparator<Edge> {
+
+    @Override
+    public int compare(Edge o1, Edge o2) {
+      return o1.weight - o2.weight;
+    }
+  }
+
+  // 4.2. 最小生成树算法Prim
 }

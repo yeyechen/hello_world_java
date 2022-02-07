@@ -271,7 +271,6 @@ public class Lecture09 {
     return curr1;
   }
 
-  //todo: implement
   private static Node bothLoopGetIntersect(Node head1, Node loopNode1, Node head2,
       Node loopNode2) {
     Node curr1 = null;
