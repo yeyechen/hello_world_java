@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -44,6 +45,8 @@ public class Lecture16 {
    *                         如果不会，要当前边，将该边的指向点加入到被选取的点中，重复2；
    *                         当所有点都被选取，最小生成数就得到了。
    * 当一个图的边极多，P算法优与K算法，反之。因为K算法是要遍历所有的边，而P算法是按点解锁。
+   *
+   * 5. Dijkstra Algorithm
    * */
 
   // 1. 图的内部表达方式，可以由外部给定的不同定义转化成自己熟悉的表示形式
@@ -194,6 +197,52 @@ public class Lecture16 {
     return result;
   }
 
+  // 4.1 最小生成树算法Kruskal
+  public static Set<Edge> kruskalMST(Graph graph) {
+    // 需要用到并查集来判断是否形成环
+    List<GraphNode> nodes = new ArrayList<>(graph.nodes.values());
+    UnionFind<GraphNode> unionFind = new UnionFind<>(nodes);
+    // 从小到大依次弹出，小根堆
+    PriorityQueue<Edge> edgeWeightAscendingQueue = new PriorityQueue<>(new EdgeWeightAscending());
+    edgeWeightAscendingQueue.addAll(graph.edges);
+    Set<Edge> result = new HashSet<>();
+    while (!edgeWeightAscendingQueue.isEmpty()) {
+      Edge edge = edgeWeightAscendingQueue.poll();
+      if (!unionFind.isSameSet(edge.from, edge.to)) {
+        result.add(edge);
+        unionFind.union(edge.from, edge.to);
+      }
+    }
+    return result;
+  }
+
+  // 4.2. 最小生成树算法Prim
+  public static Set<Edge> primMST(Graph graph) {
+    // 解锁的边进入小根堆
+    PriorityQueue<Edge> edgeWeightAscendingQueue = new PriorityQueue<>(new EdgeWeightAscending());
+    HashSet<GraphNode> nodeSet = new HashSet<>();
+    Set<Edge> result = new HashSet<>();
+    for (GraphNode node : graph.nodes.values()) { // 随便挑了一个点
+      // node 是开始点
+      if (!nodeSet.contains(node)) {
+        nodeSet.add(node);
+        // 由一个点，解锁所有相连的边
+        edgeWeightAscendingQueue.addAll(node.edges);
+        while (!edgeWeightAscendingQueue.isEmpty()) {
+          Edge edge = edgeWeightAscendingQueue.poll(); // 弹出解锁的边中，最小的边
+          GraphNode toNode = edge.to; // 可能的一个新的点
+          if (!nodeSet.contains(toNode)) { // 不含有的时候，就是新的点
+            nodeSet.add(toNode);
+            result.add(edge);
+            edgeWeightAscendingQueue.addAll(toNode.edges);
+          }
+        }
+      }
+      // break;
+    }
+    return result;
+  }
+
   public static class EdgeWeightAscending implements Comparator<Edge> {
 
     @Override
@@ -202,5 +251,41 @@ public class Lecture16 {
     }
   }
 
-  // 4.2. 最小生成树算法Prim
+  // 5. Dijkstra Algorithm
+  public static HashMap<GraphNode, Integer> dijkstra1(GraphNode from) {
+    HashMap<GraphNode, Integer> distanceMap = new HashMap<>();
+    distanceMap.put(from, 0);
+    // 打过对号的点
+    HashSet<GraphNode> selectedNodes = new HashSet<>();
+    GraphNode minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);
+    while (minNode != null) {
+      //  原始点  ->  minNode(跳转点)   最小距离distance
+      int distance = distanceMap.get(minNode);
+      for (Edge edge : minNode.edges) {
+        GraphNode toNode = edge.to;
+        if (!distanceMap.containsKey(toNode)) {
+          distanceMap.put(toNode, distance + edge.weight);
+        } else { // toNode
+          distanceMap.put(edge.to, Math.min(distanceMap.get(toNode), distance + edge.weight));
+        }
+      }
+      selectedNodes.add(minNode);
+      minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);
+    }
+    return distanceMap;
+  }
+
+  public static GraphNode getMinDistanceAndUnselectedNode(HashMap<GraphNode, Integer> distanceMap, HashSet<GraphNode> touchedNodes) {
+    GraphNode minNode = null;
+    int minDistance = Integer.MAX_VALUE;
+    for (Entry<GraphNode, Integer> entry : distanceMap.entrySet()) {
+      GraphNode node = entry.getKey();
+      int distance = entry.getValue();
+      if (!touchedNodes.contains(node) && distance < minDistance) {
+        minNode = node;
+        minDistance = distance;
+      }
+    }
+    return minNode;
+  }
 }

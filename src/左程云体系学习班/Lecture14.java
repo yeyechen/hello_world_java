@@ -68,7 +68,7 @@ public class Lecture14 {
       }
     }
 
-    private boolean isSameSet(V a, V b) {
+    public boolean isSameSet(V a, V b) {
       return findFather(nodes.get(a)) == nodes.get(b);
     }
 
