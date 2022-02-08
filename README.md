@@ -10,6 +10,8 @@
 #### git config --global --unset https.proxy
 #### or:
 #### git config --global http.proxy http://proxyuser:proxypwd@proxy.server.com:8080
+#### or:
+#### vim ~/.gitconfig -> and add a line under [http]: proxy = socks5://127.0.0.1:1080
 
 #### 2. change git username:
 #### git config --global user.name "YeyeChen"
