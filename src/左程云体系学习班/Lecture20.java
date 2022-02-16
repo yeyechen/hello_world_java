@@ -6,6 +6,11 @@ public class Lecture20 {
    * 1. 最长回文子序列(leetcode 516题): 给你一个字符串 s ，找出其中最长的回文子序列，并返回该序列的长度。
    * 子序列定义为：不改变剩余字符顺序的情况下，删除某些字符或者不删除任何字符形成的一个序列。
    *
+   * 2. 象棋马跳跃问题: 请同学们自行搜索或者想象一个象棋的棋盘，然后把整个棋盘放入第一象限，棋盘的最左下角是(0,0)位置
+   * 那么整个棋盘就是横坐标上9条线、纵坐标上10条线的区域
+   * 给你三个 参数 x，y，k
+   * 返回“马”从(0,0)位置出发，必须走k步
+   * 最后落在(x,y)上的方法数有多少种?
    * */
 
   // 1. 最长回文子序列(leetcode 516题)
@@ -35,7 +40,7 @@ public class Lecture20 {
   public static int longestPalindromeSubseqDp(String s) {
     int N = s.length();
     char[] str = s.toCharArray();
-    if (N== 0) {
+    if (N == 0) {
       return 0;
     }
     int[][] dp = new int[N][N];
@@ -54,6 +59,32 @@ public class Lecture20 {
       }
     }
     return dp[0][N - 1];
+  }
+
+  // 2. 象棋马跳跃问题
+  public static int jumpMethod(int x, int y, int k) {
+    if (x < 0 || y < 0 || x > 9 || y > 10 || k < 0) {
+      return 0;
+    }
+    return jumpProcess(0, 0, x, y, k);
+  }
+
+  private static int jumpProcess(int currX, int currY, int targetX, int targetY, int restK) {
+    if (currX < 0 || currY < 0 || currX > 9 || currY > 10) {
+      return 0;
+    }
+    if (restK == 0) {
+      return currX == targetX && currY == targetY ? 1 : 0;
+    }
+    int ways = jumpProcess(currX + 1, currY + 2, targetX, targetY, restK - 1);
+    ways += jumpProcess(currX - 1, currY + 2, targetX, targetY, restK - 1);
+    ways += jumpProcess(currX + 1, currY - 2, targetX, targetY, restK - 1);
+    ways += jumpProcess(currX - 1, currY - 2, targetX, targetY, restK - 1);
+    ways += jumpProcess(currX + 2, currY + 1, targetX, targetY, restK - 1);
+    ways += jumpProcess(currX - 2, currY + 1, targetX, targetY, restK - 1);
+    ways += jumpProcess(currX + 2, currY - 1, targetX, targetY, restK - 1);
+    ways += jumpProcess(currX - 2, currY - 1, targetX, targetY, restK - 1);
+    return ways;
   }
 
   public static void main(String[] args) {
