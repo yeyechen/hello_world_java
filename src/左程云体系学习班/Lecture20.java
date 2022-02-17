@@ -7,7 +7,7 @@ public class Lecture20 {
    * 子序列定义为：不改变剩余字符顺序的情况下，删除某些字符或者不删除任何字符形成的一个序列。
    *
    * 2. 象棋马跳跃问题: 请同学们自行搜索或者想象一个象棋的棋盘，然后把整个棋盘放入第一象限，棋盘的最左下角是(0,0)位置
-   * 那么整个棋盘就是横坐标上9条线、纵坐标上10条线的区域
+   * 那么整个棋盘就是横坐标上9条线、纵坐标上10条线的区域(10*9)
    * 给你三个 参数 x，y，k
    * 返回“马”从(0,0)位置出发，必须走k步
    * 最后落在(x,y)上的方法数有多少种?
@@ -63,18 +63,18 @@ public class Lecture20 {
 
   // 2. 象棋马跳跃问题
   public static int jumpMethod(int x, int y, int k) {
-    if (x < 0 || y < 0 || x > 9 || y > 10 || k < 0) {
+    if (x < 0 || y < 0 || x > 9 || y > 8 || k < 0) {
       return 0;
     }
     return jumpProcess(0, 0, x, y, k);
   }
 
   private static int jumpProcess(int currX, int currY, int targetX, int targetY, int restK) {
-    if (currX < 0 || currY < 0 || currX > 9 || currY > 10) {
+    if (currX < 0 || currY < 0 || currX > 9 || currY > 8) {
       return 0;
     }
     if (restK == 0) {
-      return currX == targetX && currY == targetY ? 1 : 0;
+      return (currX == targetX && currY == targetY) ? 1 : 0;
     }
     int ways = jumpProcess(currX + 1, currY + 2, targetX, targetY, restK - 1);
     ways += jumpProcess(currX - 1, currY + 2, targetX, targetY, restK - 1);
@@ -87,7 +87,41 @@ public class Lecture20 {
     return ways;
   }
 
+  // 改动态规划: 三维表, 先把最后一层k==0填好, 所有8中情况都是依赖下一层k-1的
+  public static int jumpMethodDp(int targetX, int targetY, int k) {
+    if (targetX < 0 || targetY < 0 || targetX > 9 || targetY > 8 || k < 0) {
+      return 0;
+    }
+    int[][][] dp = new int[10][9][k + 1];
+    dp[targetX][targetY][0] = 1;
+    for (int restK = 1; restK <= k; restK++) {
+      for (int currX = 0; currX < 10; currX++) {
+        for (int currY = 0; currY < 9; currY++) {
+          int ways = pick(dp, currX + 1, currY + 2, restK - 1);
+          ways += pick(dp, currX - 1, currY + 2, restK - 1);
+          ways += pick(dp, currX + 1, currY - 2, restK - 1);
+          ways += pick(dp, currX - 1, currY - 2, restK - 1);
+          ways += pick(dp, currX + 2, currY + 1, restK - 1);
+          ways += pick(dp, currX - 2, currY + 1, restK - 1);
+          ways += pick(dp, currX + 2, currY - 1, restK - 1);
+          ways += pick(dp, currX - 2, currY - 1, restK - 1);
+          dp[currX][currY][restK] = ways;
+        }
+      }
+    }
+    return dp[0][0][k];
+  }
+
+  private static int pick(int[][][] dp, int currX, int currY, int restK) {
+    if (currX < 0 || currY < 0 || currX > 9 || currY > 8) {
+      return 0;
+    }
+    return dp[currX][currY][restK];
+  }
+
   public static void main(String[] args) {
     System.out.println(longestPalindromeSubseqDp("bbbab"));
+    System.out.println(jumpMethod(7, 7, 10));
+    System.out.println(jumpMethodDp(7, 7, 10));
   }
 }
