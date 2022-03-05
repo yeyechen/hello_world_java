@@ -1,5 +1,7 @@
 package 左程云体系学习班;
 
+import static 左程云体系学习班.Lecture21.randomArray;
+
 public class Lecture22 {
   /*
    * 1. 打怪兽问题(和鲍勃死亡问题类似，样本对应模型): 给定3个参数，N，M，K
@@ -233,19 +235,6 @@ public class Lecture22 {
       }
     }
     System.out.println("测试结束");
-  }
-
-  public static int[] randomArray(int maxLen, int maxValue) {
-    int N = (int) (Math.random() * maxLen);
-    int[] arr = new int[N];
-    boolean[] has = new boolean[maxValue + 1];
-    for (int i = 0; i < N; i++) {
-      do {
-        arr[i] = (int) (Math.random() * maxValue) + 1;
-      } while (has[arr[i]]);
-      has[arr[i]] = true;
-    }
-    return arr;
   }
 }
 
