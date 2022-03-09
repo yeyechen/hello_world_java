@@ -15,3 +15,5 @@ git config --global http.proxy http://proxyuser:proxypwd@proxy.server.com:8080
 
 #### 2. change git username:
 #### git config --global user.name "YeyeChen"
+
+github token: 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
