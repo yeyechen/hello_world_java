@@ -199,7 +199,7 @@ public class Lecture05 {
     System.out.println("quickSort 3.0 finish in " + (endTime - startTime) + " ms");
   }
 
-  private static int[] randomArrayGenerator(int maxLen, int maxValue) {
+  public static int[] randomArrayGenerator(int maxLen, int maxValue) {
     int len = (int) (Math.random() * maxLen) + 1;
     int[] result = new int[len];
     for (int i = 0; i < len; i++) {
