@@ -1,4 +1,4 @@
-package LeetCodeHot100;
+package LeetCode.LeetCodeHot100;
 
 import static 左程云体系学习班.Lecture05.randomArrayGenerator;
 

@@ -1,4 +1,4 @@
-package LeetCodeHot100;
+package LeetCode.LeetCodeHot100;
 
 public class Code064 {
 
