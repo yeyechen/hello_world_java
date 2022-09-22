@@ -92,7 +92,7 @@ public class Lecture21 {
 
   // 2. 数字组合问题
   public static int combination(int[] arr, int aim) {
-    if (arr.length == 0 || aim < 0) {
+    if (arr.length == 0 || aim <= 0) {
       return 0;
     }
     return combineProcess(arr, 0, aim);
@@ -116,7 +116,7 @@ public class Lecture21 {
 
   // 数字组合问题改动态规划
   public static int combinationDp(int[] arr, int aim) {
-    if (arr.length == 0 || aim < 0) {
+    if (arr.length == 0 || aim <= 0) {
       return 0;
     }
     int N = arr.length;
@@ -138,7 +138,7 @@ public class Lecture21 {
 
   // 数字组合问题改动态规划优化成常数时间复杂度(优化枚举for循环), 画图可以分析出位置关系依赖
   public static int combinationDpOpt(int[] arr, int aim) {
-    if (arr.length == 0 || aim < 0) {
+    if (arr.length == 0 || aim <= 0) {
       return 0;
     }
     int N = arr.length;
