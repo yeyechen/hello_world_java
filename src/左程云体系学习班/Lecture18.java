@@ -168,6 +168,7 @@ public class Lecture18 {
     // 卡牌数量大于1时，因为是后手，对手做最好决定，所以是最小值
     int p1 = f(arr, L + 1, R);
     int p2 = f(arr, L, R - 1);
+    // 因为是后手，所以对手只会给你min的值
     return Math.min(p1, p2);
   }
 
