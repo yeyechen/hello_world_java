@@ -3,7 +3,7 @@ package 左程云体系学习班;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-public class Lecutre24 {
+public class Lecture24 {
 
  /*
   * 滑动窗口：滑动窗口有左边界L和右边界R，在数组或者字符串或者一个序列上，记为S，则窗口就意味着S[L..R]这一部分。
