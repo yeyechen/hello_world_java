@@ -12,15 +12,15 @@ public class Lecture35 {
 
   public static class AVLNode<K extends Comparable<K>, V> {
 
-    public K k; // key
-    public V v; // value
+    public K key; // key
+    public V value; // value
     public AVLNode<K, V> l; // left tree
     public AVLNode<K, V> r; // right tree
     public int h; // current tree height
 
     public AVLNode(K key, V value) {
-      this.k = key;
-      this.v = value;
+      this.key = key;
+      this.value = value;
       this.h = 1;
     }
   }
@@ -90,7 +90,7 @@ public class Lecture35 {
       if (cur == null) {
         return new AVLNode<>(key, value);
       } else {
-        if (key.compareTo(cur.k) < 0) {
+        if (key.compareTo(cur.key) < 0) {
           cur.l = add(cur.l, key, value);
         } else {
           cur.r = add(cur.r, key, value);
@@ -101,16 +101,16 @@ public class Lecture35 {
     }
 
     private AVLNode<K, V> delete(AVLNode<K, V> cur, K key) {
-      if (key.compareTo(cur.k) < 0) {
+      if (key.compareTo(cur.key) < 0) {
         cur.l = delete(cur.l, key);
-      } else if (key.compareTo(cur.k) > 0) {
+      } else if (key.compareTo(cur.key) > 0) {
         cur.r = delete(cur.r, key);
       } else { // found the node to be deleted
         if (cur.l == null && cur.r == null) {
           cur = null;
         } else if (cur.l == null && cur.r != null) {
           cur = cur.r;
-        } else if (cur.r != null && cur.r == null) {
+        } else if (cur.l != null && cur.r == null) {
           cur = cur.l;
         } else { // tougher to handle
           AVLNode<K, V> des = cur.r;
@@ -119,7 +119,7 @@ public class Lecture35 {
           while (des.l != null) {
             des = des.l;
           }
-          cur.r = delete(cur.r, des.k); // let the "delete" do the re-balancing for us
+          cur.r = delete(cur.r, des.key); // let the "delete" do the re-balancing for us
           des.l = cur.l;
           des.r = cur.r;
           cur = des;
