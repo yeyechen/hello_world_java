@@ -63,7 +63,7 @@ public class Lecture36 {
 
       int rightSize = cur.r == null ? 0 : cur.r.size;
       int rightLeftSize = cur.r == null || cur.r.l == null ? 0 : cur.r.l.size;
-      int rightRightSize = cur.r == null || cur.r.r == null ? 0 : cur.r.size;
+      int rightRightSize = cur.r == null || cur.r.r == null ? 0 : cur.r.r.size;
 
       if (leftLeftSize > rightSize) { // LL
         cur = rightRotate(cur);
