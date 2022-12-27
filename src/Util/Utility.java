@@ -1,3 +1,5 @@
+package Util;
+
 public class Utility {
 
   public static int[] randomArrayGenerator(int maxLen, int maxValue, boolean elementsAllPositive) {
