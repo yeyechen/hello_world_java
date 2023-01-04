@@ -89,7 +89,7 @@ public class Code03_StoneMerge {
         // 利用bestSplit来优化枚举的计算：下限是左边格子split点，上限是下边格子split点
         for (int split = bestSplit[L][R - 1]; split <= bestSplit[L + 1][R]; split++) {
           int cur = dp[L][split] + dp[split + 1][R];
-          if (cur < next) {
+          if (cur <= next) { // 小于或者小于等于都可以
             next = cur;
             curBestSplit = split;
           }

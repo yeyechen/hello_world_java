@@ -124,7 +124,7 @@ public class Code04_SplitArrayLargestSum {
           int rightCost =
               split == i ? 0 : Utility.getSum(preSum, split + 1, i);
           int bottleNeck = Math.max(leftCost, rightCost);
-          if (bottleNeck < result) { // note: must be strictly less than
+          if (bottleNeck < result) { // 必须是小于。证明很复杂，有些题目是小于，另一些是小于等于。放进对数器验证就行了。
             result = bottleNeck;
             curBestSplit = split;
           }
@@ -191,7 +191,8 @@ public class Code04_SplitArrayLargestSum {
       int ans1 = splitArray(arr, k);
       int ans2 = splitArrayDp(arr, k);
       int ans3 = splitArrayQuad(arr, k);
-      if (ans1 != ans2 || ans2 != ans3) {
+      int ans4 = splitArrayOptimal(arr, k);
+      if (ans1 != ans2 || ans2 != ans3 || ans3!= ans4) {
         System.out.println("test fail");
         break;
       }
