@@ -11,4 +11,19 @@ public class Utility {
     }
     return result;
   }
+
+  // Adjusted pre-sum, with additional 0 at the first index, for convenience to get the range sum.
+  public static int[] calcPreSum(int[] arr) {
+    int N = arr.length;
+    int[] s = new int[N + 1];
+    s[0] = 0;
+    for (int i = 0; i < N; i++) {
+      s[i + 1] = s[i] + arr[i];
+    }
+    return s;
+  }
+
+  public static int getSum(int[] preSum, int L, int R) {
+    return preSum[R + 1] - preSum[L];
+  }
 }
