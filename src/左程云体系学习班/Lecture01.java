@@ -83,7 +83,7 @@ public class Lecture01 {
     int mid = 0;
     // L..R
     while (L < R) { // L..R 至少两个数的时候
-      mid = L + ((R - L) >> 1); // -> mid = (L + R) / 2
+      mid = L + ((R - L) >> 1); // -> mid = (L + R) / 2 因为 L+R 可能因为太大溢出
       if (sortedArr[mid] == num) {
         return true;
       } else if (sortedArr[mid] > num) {
@@ -95,7 +95,11 @@ public class Lecture01 {
     return sortedArr[L] == num;
   }
 
-  //局部最小问题: 在一个无序数组中，任何相邻两个数都不同，找出局部最小的index(即 arr[i-1] > arr[i] < arr[i+1])。
+  // 局部最小问题: 在一个无序数组中，任何相邻两个数都不同，找出局部最小的index(即 arr[i-1] > arr[i] < arr[i+1])。
+  // 题解: 很像computational optimisation里的问题。首先检查边界，如果边界都不是局部最小，那么这说明:
+  // index 从 0 -> 1 的数字成下降趋势(decreasing);
+  // index 从 N-2 -> N-1 的数字成上升趋势(increasing);
+  // 已知任何相邻两个数都不同，想象一下一个函数图像，从0到N-1中间一定会有一个局部最小(local minimum/optimum)
   public static int getLocalMinIndex(int[] arr) {
     if (arr == null || arr.length == 0) {
       return -1;
@@ -111,10 +115,10 @@ public class Lecture01 {
     int R = arr.length - 2;
     int mid = 0;
     while (L < R) {
-      mid = L + ((R - L)) >> 1;
+      mid = L + ((R - L) >> 1);
       if (arr[mid] > arr[mid - 1]) {
         R = mid - 1;
-      } else if (arr[mid] < arr[mid + 1]) {
+      } else if (arr[mid] > arr[mid + 1]) {
         L = mid + 1;
       } else {
         return mid;
@@ -142,7 +146,6 @@ public class Lecture01 {
 
   public static void main(String[] args) {
     //  对数器:
-
     int testAmount = 5000;
     int maxSize = 100; // 随机数组的长度为 0～100
     int maxValue = 100; // 随机数组中的值为 -100~100
