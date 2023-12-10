@@ -22,7 +22,7 @@ public class Lecture01 {
    * 4. 二分法: 时间复杂度O(logN)，使用前提是有序数组(除非数据状况特殊，问题情况特殊，比如局部最小问题)。
    * */
 
-
+  // time complexity: O(n^2)
   public static void selectionSort(int[] arr) {
     if (arr == null || arr.length < 2) {
       return;
@@ -39,6 +39,8 @@ public class Lecture01 {
     }
   }
 
+  // O(n^2) in the worst case
+  // O(n) in the best case
   public static void insertionSort(int[] arr) {
     if (arr == null || arr.length < 2) {
       return;
@@ -56,6 +58,7 @@ public class Lecture01 {
     }
   }
 
+  // O(n^2) time complexity
   public static void bubbleSort(int[] arr) {
     if (arr == null || arr.length < 2) {
       return;
@@ -80,7 +83,7 @@ public class Lecture01 {
     int mid = 0;
     // L..R
     while (L < R) { // L..R 至少两个数的时候
-      mid = L + ((R - L) >> 1); // -> mid = L + R
+      mid = L + ((R - L) >> 1); // -> mid = (L + R) / 2
       if (sortedArr[mid] == num) {
         return true;
       } else if (sortedArr[mid] > num) {

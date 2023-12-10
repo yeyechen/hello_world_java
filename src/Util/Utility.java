@@ -12,6 +12,19 @@ public class Utility {
     return result;
   }
 
+  // generates two random arrays with same length
+  public static int[][] randomArrayPairGenerator(int maxLen,  int maxValue, boolean elementsAllPositive) {
+    int len = (int) (Math.random() * maxLen) + 1;
+    int[][] result = new int[2][len];
+    for (int i = 0; i < len; i++) {
+      int num1 = (int) (Math.random() * (maxValue + 1)) - (int) (Math.random() * maxValue);
+      int num2 = (int) (Math.random() * (maxValue + 1)) - (int) (Math.random() * maxValue);
+      result[0][i] = elementsAllPositive ? Math.abs(num1) : num1;
+      result[1][i] = elementsAllPositive ? Math.abs(num2) : num2;
+    }
+    return result;
+  }
+
   // Adjusted pre-sum, with additional 0 at the first index, for convenience to get the range sum.
   public static int[] calcPreSum(int[] arr) {
     int N = arr.length;
