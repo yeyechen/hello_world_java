@@ -1,14 +1,13 @@
 package 左程云体系学习班;
 
-import java.util.Arrays;
-
 public class Lecture05 {
   /*
    *
    * 1. Merge Sort附加题(leetcode 327)：给你一个整数数组，nums以及两个整数lower和upper。求数组中，
    * 和的值位于范围[lower, upper]之内的子数组的个数。
    * 精髓：假设0～i整体累加和是x，那么求以i位置结尾的子数组中，有多少个在[lower, upper]范围上，等同于求i之前的所有
-   * 前缀和中有多少前缀和在[x-upper, x-lower]范围上。
+   * 前缀和中有多少前缀和在[x-upper, x-lower]范围上。在merge之前，遍历右侧所有数，并且看看和左侧哪些数配对是达标的。
+   * 利用有序的特性，使用滑动窗口。遍历配对算法O(n), 使得整体算法O(nlog n)
    *
    * 2. 快速排序
    * 2.1 快速排序1.0: 每次只确定一个数字的位置，数组变为[<=x, x, >x]，其中<=x和>x部分无序
@@ -40,8 +39,7 @@ public class Lecture05 {
     }
     int mid = l + ((r - l) >> 1);
     return countRangeSumProcess(sum, l, mid, lower, upper) + countRangeSumProcess(sum, mid + 1, r,
-        lower, upper) + merge(sum,
-        l, mid, r, lower, upper);
+        lower, upper) + merge(sum, l, mid, r, lower, upper);
   }
 
   private static int merge(long[] sum, int l, int mid, int r, int lower, int upper) {
@@ -59,7 +57,7 @@ public class Lecture05 {
       while (windowL <= mid && sum[windowL] < min) {
         windowL++;
       }
-      ans += windowR - windowL;
+      ans += Math.min(0, windowR - windowL);
     }
 
     long[] help = new long[r - l + 1];
@@ -207,6 +205,4 @@ public class Lecture05 {
     }
     return result;
   }
-
-
 }

@@ -1,6 +1,5 @@
 package 左程云体系学习班;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -37,7 +36,7 @@ public class Lecture02 {
    *
    * (3). 怎么把一个int类型的数，把最右侧的1提取出来:
    * a = 001100100 -> return 000000100
-   * a = a & ((~a) + 1) = a & (-a) "~"是取反; (~a) + 1 === -a;
+   * a = a & ((~a) + 1) = a & (-a) "~"是取反; (~a) + 1 === -a; 至于为什么取反加一是相反数不多赘述
    * a = 001100100; ~a = 110011011; (~a) + 1 = 110011100; a & ((~a) + 1) = 000000100
    *
    * (4). (2)进阶版，一个数组中有两个数出现了奇数次，其他数都出现了偶数次，找到并打印这两个数:
@@ -78,19 +77,19 @@ public class Lecture02 {
     // xor = a ^ b，a和b是两个出现了奇次的数
     int xor = findOneOddTimesNum(arr);
 
-    //提取xor最右的1得出的数
-    //比如rightOne = 0000001000
+    // 提取xor最右的1得出的数
+    // 比如rightOne = 0000001000
     int rightOne = xor & (-xor);
 
     int xorA = 0;
 
-    //找到所有在rightOne这一位上为1的数，并全部亦或
+    // 找到所有在rightOne这一位上为1的数，并全部亦或
     for (int n : arr) {
       if ((n & rightOne) != 0) {
         xorA ^= n;
       }
     }
-    //  那么最后xorA的值即其中一个出现奇数次的数a，另外一个数b = (a ^ b) ^ a = xor ^ xorA
+    // 那么最后xorA的值即其中一个出现奇数次的数a，另外一个数b = (a ^ b) ^ a = xor ^ xorA
     System.out.println(xorA + ", " + (xor ^ xorA));
   }
 

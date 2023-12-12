@@ -1,7 +1,5 @@
 package 左程云体系学习班;
 
-import java.util.Arrays;
-
 public class Lecture04 {
   /*
    * 1. Merge Sort
@@ -13,9 +11,10 @@ public class Lecture04 {
    *
    * 2. 关于Merge Sort延伸出来的一些题目
    * 2.1 小和问题：在一个数组中，每一个数的小和为该数左侧所有比这个数小的数的和，求整个数组的小和，即所有数的小和的和。
-   * 2.2 逆序对问题：在一个数组中，一个数的右侧的数比这个数小的话，这两个数可以被称为一组逆序对，求这个数组总共有多少组逆序对。
+   * 2.2 逆序对问题(LeetCode LCR 170)：在一个数组中，一个数的右侧的数比这个数小的话，这两个数可以被称为一组逆序对，求这个数组总共有多少组逆序对。
    *               这个问题跟2.1非常类似，只不过在merge时两个指针从最右边开始比较。
-   * 2.3 两倍问题：在一个数组中，如果一个数右侧的某一数的两倍比这个数还要小，这两个数算一组，总共有多少组这样的数。
+   * 2.3 两倍问题(leetcode 493)：在一个数组中，如果一个数右侧的某一数的两倍比这个数还要小，这两个数算一组，总共有多少组这样的数。
+   *
    *
    * */
 
@@ -148,23 +147,23 @@ public class Lecture04 {
   }
 
   //2.2 逆序对问题
-  public static int reversePairCount(int[] arr) {
+  public static int descendingPairs(int[] arr) {
     if (arr == null || arr.length < 2) {
       return 0;
     }
-    return reversePairCountProcess(arr, 0, arr.length - 1);
+    return descendingPairsProcess(arr, 0, arr.length - 1);
   }
 
-  private static int reversePairCountProcess(int[] arr, int l, int r) {
+  private static int descendingPairsProcess(int[] arr, int l, int r) {
     if (l == r) {
       return 0;
     }
     int mid = l + ((r - l) >> 1);
-    return reversePairCountProcess(arr, l, mid) + reversePairCountProcess(arr, mid + 1, r)
-        + reversePairCountMerge(arr, l, mid, r);
+    return descendingPairsProcess(arr, l, mid) + descendingPairsProcess(arr, mid + 1, r)
+        + descendingMerge(arr, l, mid, r);
   }
 
-  private static int reversePairCountMerge(int[] arr, int l, int mid, int r) {
+  private static int descendingMerge(int[] arr, int l, int mid, int r) {
     int sum = 0;
     int[] help = new int[r - l + 1];
     int i = r - l;
@@ -185,27 +184,27 @@ public class Lecture04 {
     return sum;
   }
 
-  public static int rightTwiceSmallerCount(int[] arr) {
+  public static int reversePairs(int[] arr) {
     if (arr == null || arr.length < 2) {
       return 0;
     }
-    return rightTwiceSmallerCountProcess(arr, 0, arr.length - 1);
+    return reversePairsProcess(arr, 0, arr.length - 1);
   }
 
-  private static int rightTwiceSmallerCountProcess(int[] arr, int l, int r) {
+  private static int reversePairsProcess(int[] arr, int l, int r) {
     if (l == r) {
       return 0;
     }
     int mid = l + ((r - l) >> 1);
-    return rightTwiceSmallerCountProcess(arr, l, mid) + rightTwiceSmallerCountProcess(arr, mid + 1,
-        r) + rightTwiceSmallerCountMerge(arr, l, mid, r);
+    return reversePairsProcess(arr, l, mid) + reversePairsProcess(arr, mid + 1,
+        r) + reverseMerge(arr, l, mid, r);
   }
 
-  private static int rightTwiceSmallerCountMerge(int[] arr, int l, int mid, int r) {
+  private static int reverseMerge(int[] arr, int l, int mid, int r) {
     int result = 0;
     int windowR = mid + 1;
     for (int i = l; i <= mid; i++) {
-      while (windowR <= r && arr[i] > arr[windowR] * 2) {
+      while (windowR <= r && (long) arr[i] > (long) arr[windowR] * 2) {
         windowR++;
       }
       result += windowR - mid - 1;

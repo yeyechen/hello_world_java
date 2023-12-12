@@ -1,11 +1,8 @@
 package 左程云体系学习班;
 
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.Stack;
-import 左程云体系学习班.Lecture03.StackImplementationQueue.QueueImplementationStack;
 
 public class Lecture03 {
 
@@ -23,7 +20,7 @@ public class Lecture03 {
    * 2.3 用栈实现队列:用两个栈，一个叫pushStack另一个叫popStack，两个栈初始化都是空的。当push队列时，push到pushStack，
    * 当第一次pop时，因为队列遵循先进先出，把所有pushStack中的东西倒入popStack，顺序就正确了，可以正常pop。接下来
    * 如果继续push的话就push到pushStack，pop的话就从popStack中pop，直到popStack为空。此时再重复操作。
-   * 注意：从pushStack倒入popStack要一次性倒完；只有当popStack为空时才能讲pushStack中的数倒入popStack。
+   * 注意：从pushStack倒入popStack要一次性倒完；只有当popStack为空时才能将pushStack中的数倒入popStack。
    *
    * 2.4 用队列实现栈:用两个队列，每次push时push到其中一个队列中，另外一个为空。要pop时，因为遵循先进先出，
    * 将数据前n-1个元素倒入空队列中，返回剩下最后一个元素。如此这个队列就为空了，下次push时就加入另一个元素多的队列，重复操作。
@@ -233,7 +230,7 @@ public class Lecture03 {
       return this.stackPush.peek();
     }
 
-    //2.4 用栈实现队列
+    //2.4 用队列实现栈
     public static class QueueImplementationStack<T> {
 
       private Queue<T> queue;
