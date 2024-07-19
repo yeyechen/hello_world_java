@@ -30,12 +30,15 @@ public class Lecture06 {
    *           7    8
    * 完全二叉树中如果每棵子树的最大值都在顶部就是大根堆；
    * 完全二叉树中如果每棵子树的最小值都在顶部就是小根堆；
-   * 堆结构的heapInsert(上升)与heapify(下沉)操作；两个操作都是O(logN)；
+   * 任何大根堆/小根堆的子树，也都是大根堆/小根堆；
+   * 当需要在任何堆结构里添加元素时，顺序调用heapInsert(上升)与heapify(下沉)操作(最多触发一个)；两个操作都是O(logN)；
    * 堆结构的增大和减少；
-   * 优先级队列结构，就是堆结构。
+   * 优先级队列结构(Priority Queue)，就是堆结构。Java中的Priority Queue默认小根堆。
    *
    * 2.1 堆排序：把一个数组想象称一个完全二叉树，调整为大根堆，即下标0位置的数为数组中最大的数，
-   * 将这个数跟heapSize-1所在的下标位置做交换，heapSize--，然后下沉再调整为大根堆。对子数组重复操作。
+   * 将这个数跟heapSize-1所在的下标位置做交换，heapSize--，然后下标0位置的数heapify再调整为大根堆。
+   * 这样的操作在堆的逻辑上删除了当前最大值(因为heapSize--了)，但在真实数组中并未删除，而是依次排在了最后。
+   * 对子数组重复操作，直至 heapSize = 0。
    *
    * 2.2 小于k距离排序问题：排序一个无序数组，但是这个无序数组中的每一个数当前位置距离排序好的位置不超过k。
    * 举个例子，最小值位置0应该出现的数距离不超过0这个数k，那么就可以利用小根堆在0～k这个范围找0位置上的数，找到后交换。
@@ -65,25 +68,30 @@ public class Lecture06 {
 
 
   //2.堆 (大根堆)
+  // 给定一个array和一个index，让index上的数层层向上比较，让该数维持大根堆逻辑
   private static void heapInsert(int[] arr, int index) {
-    //每次都个自己的父节点做比较，如果比父节点大，交换。重复操作直到小于等于当前父节点，或者已经到顶
+    //每次都跟自己的父节点做比较，如果比父节点大，交换。重复操作直到小于等于当前父节点，或者已经到顶
     while (arr[index] > arr[(index - 1) / 2]) {
       swap(arr, index, (index - 1) / 2);
       index = (index - 1) / 2;
     }
   }
 
+  // 给定一个array和一个index，让index上的数层层向下比较，让该数维持大根堆逻辑
   private static void heapify(int[] arr, int index, int heapSize) {
     int left = index * 2 + 1;
-    //每次都和自己较大的子节点做比较，如果小于较大的子节点，交换。重复操作直到大于等于当前较大子节点，或已经越界
+
+    // 每次都和自己较大的子节点做比较，如果小于较大的子节点，交换。重复操作直到大于等于当前较大子节点，或已经越界
+    // leftChild越界的话，rightChild也必定越界
     while (left < heapSize) {
-      // 把较大孩子的下标赋给largest，可能不存在右子节点
+      // 把leftChild和rightChild中值较大的下标赋给largest，但可能不存在rightChild
       int largest = left + 1 < heapSize && arr[left + 1] > arr[left] ? left + 1 : left;
+      // 如果index的数比较大的子节点还要大，说明不需要再下沉，退出loop
       largest = arr[largest] > arr[index] ? largest : index;
       if (largest == index) {
         break;
       }
-      // index和较大子节点互换
+      // 如果index的数比较大的子节点小，需要继续下沉；index和较大子节点互换
       swap(arr, largest, index);
       index = largest;
       left = index * 2 + 1;
@@ -95,18 +103,24 @@ public class Lecture06 {
     if (arr == null || arr.length < 2) {
       return;
     }
-    //先把arr调整为大根堆
+    // 先把arr调整为大根堆
 
-    //1.从上往下建堆，复杂度为O(N*logN)
+    // 第一种方式，从上往下建堆，复杂度为O(N*logN)
+    // 因为每一次heapInsert的时间复杂度是O(logN)，需要insert N次
     // for (int i = 0; i < arr.length; i++) {
     //   heapInsert(arr, i);
     // }
-    //2.从下往上建立堆，复杂度为O(N)
+    // 第二种方式，从下往上建立堆，复杂度为O(N)
+    // facts：一个总节点数为N的堆(完全二叉树)，叶节点(leaf nodes)的数量为N/2，叶节点往上(倒数第二层)的节点数量为N/4
+    // 以此类推N/8, N/16... 叶节点heapify时不需要任何交换，因为已经在最底了。倒数第二层最多交换一次，倒数第三层
+    // 最多交换两次，以此类推... 如果把if判断也算一次操作的话，总的时间复杂度需要算上叶节点，反之则不用。
+    // 那么总的时间复杂度为：T(N) = N/2 + N/4 * 2 + N/8 * 3 + N/16 * 4 +... 等比数列，复杂度会收敛为O(N)
     for (int i = arr.length - 1; i >= 0; i--) {
       heapify(arr, i, arr.length);
     }
+    // 最后一个步骤依次拿出大根堆0位置的最大数，放入一个新的arr也好，原arr也好，从而完成排序
+    // 把大根堆0位置的数(最大的数)与最后的位置交换，然后固定住不动因为heapSize缩小了
     int heapSize = arr.length;
-    //把大根堆0位置的数(最大的数)与最后的位置交换，然后固定住不动因为heapSize缩小了
     swap(arr, 0, --heapSize);
     while (heapSize > 0) {
       heapify(arr, 0, heapSize);
@@ -129,7 +143,7 @@ public class Lecture06 {
       heap.add(arr[index]);
     }
     int i = 0;
-    //接下来寻找1..k+1; 2..k+2; ...中最小的数，然后放入对应的index中
+    //接下来寻找1..k+1; 2..k+2; ...中最小的数，然后放入对应的i中
     for (; index < arr.length; i++, index++) {
       arr[i] = heap.poll();
       heap.add(arr[index]);

@@ -10,9 +10,12 @@ import java.util.PriorityQueue;
 
 public class Lecture07 {
 
-  /*
-   * 1. 最大线段重合问题：给定多条线段，每条线段的表示方式为[start, end]，分别表示该线段的开始以及结束位置。线段的开始和
+  /* 1. 关于堆的题目：
+   * 1.1 最大线段重合问题：给定多条线段，每条线段的表示方式为[start, end]，分别表示该线段的开始以及结束位置。线段的开始和
    * 结束位置都是整数，并且线段重合区域的长度必须 >=1 (两点重合不算线段重合)。求线段最多重合区域中，包含了几条线段。
+   *
+   * 1.2 LeetCode 452 用最少数量的箭引爆气球: 与1.1非常类似。
+   * https://leetcode.cn/problems/minimum-number-of-arrows-to-burst-balloons/
    *
    * 2. 加强堆(增加反向索引表)
    * 系统提供的堆无法做到的事情：已经入堆的元素，如果参与排序的指标发生变化，系统提供的堆无法做到时间复杂度O(logN)，都是O(N)的调整；
@@ -20,7 +23,7 @@ public class Lecture07 {
    *
    * */
 
-  //1.1 O(N^2)方法
+  // 1.1.1 O(N^2)方法
   public static int maxCover(int[][] lines) {
     //先求出所有线段中的最小值的点和最大值的点，那么所有点都在这个范围中
     int min = Integer.MAX_VALUE;
@@ -45,8 +48,8 @@ public class Lecture07 {
     return maxCover;
   }
 
-  //1.2 利用小根堆
-  //自定义Line class
+  // 1.1.2 利用小根堆
+  // 自定义Line class
   private static class Line {
 
     private final int start;
@@ -58,11 +61,18 @@ public class Lecture07 {
     }
   }
 
-  //这样就可以自定义比较器，从而让给定的线段按照一定顺序排列
+  // 这样就可以自定义比较器，从而让给定的线段按照一定顺序排列；这里按线段开始位置从小到大排序。
   private static class startAscendingOrder implements Comparator<Line> {
 
     @Override
     public int compare(Line o1, Line o2) {
+      // prevent integer overflow
+      if (o1.start < 0 && o2.start > 0) {
+        return -1;
+      }
+      if (o1.start > 0 && o2.start < 0) {
+        return 1;
+      }
       return o1.start - o2.start;
     }
   }
@@ -120,6 +130,28 @@ public class Lecture07 {
       }
     }
     System.out.println("test end");
+  }
+
+  // 1.2 LeetCode 452 用最少数量的箭引爆气球
+  public static int findMinArrowShots(int[][] lines) {
+    Line[] orderedLines = new Line[lines.length];
+    for (int i = 0; i < lines.length; i++) {
+      orderedLines[i] = new Line(lines[i][0], lines[i][1]);
+    }
+    Arrays.sort(orderedLines, new startAscendingOrder());
+
+    PriorityQueue<Integer> heap = new PriorityQueue<>();
+    int numArrows = 0;
+    for (Line line : orderedLines) {
+      while (!heap.isEmpty() && heap.peek() < line.start) {
+        heap.clear();
+        numArrows++;
+      }
+      heap.add(line.end);
+    }
+
+    // all balloons left can be shot with one arrow
+    return ++numArrows;
   }
 
   //2. 加强堆
