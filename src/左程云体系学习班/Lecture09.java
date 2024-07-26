@@ -69,6 +69,8 @@ public class Lecture09 {
     Node curr = mid.next;
     Node next = curr.next;
     mid.next = null;
+    // 0 -> 1 -> 2 -> 3 -> 4
+    // becomes: 0 -> 1 -> 2 -> 3 <- 4 <- 5, and 3 -> null
     while (curr != null) {
       curr.next = mid;
       mid = curr;
